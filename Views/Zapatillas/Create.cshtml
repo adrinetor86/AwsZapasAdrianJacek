@@ -1,0 +1,44 @@
+@model AwsZapasAdrianJacek.Models.Zapatilla
+
+@{
+    ViewData["Title"] = "Nueva Zapatilla";
+}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h2 class="card-title mb-4">Añadir Nueva Zapatilla</h2>
+            
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label asp-for="Nombre" class="form-label font-weight-bold">Nombre del Modelo</label>
+                    <input asp-for="Nombre" class="form-control" placeholder="Ej. Air Jordan 1 High" required />
+                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Descripcion" class="form-label font-weight-bold">Descripción</label>
+                    <textarea asp-for="Descripcion" class="form-control" rows="4" placeholder="Introduce las características o estilo de la zapatilla..."></textarea>
+                    <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label font-weight-bold">Imagen de la Zapatilla</label>
+                    <input type="file" name="archivoImagen" class="form-control" accept="image/*" required />
+                    <div class="form-text">Formatos admitidos: JPG, PNG, WEBP. Se subirá directamente a AWS S3.</div>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <a asp-action="Index" class="btn btn-light border">Cancelar</a>
+                    <button type="submit" class="btn btn-primary px-4">Guardar y Subir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

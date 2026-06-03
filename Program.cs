@@ -1,7 +1,24 @@
+using Amazon.S3;
+using AwsZapasAdrianJacek.Data;
+using AwsZapasAdrianJacek.Repositories;
+using AwsZapasAdrianJacek.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAWSService<IAmazonS3>();
+builder.Services.AddTransient<RepositoryZapatillas>();
+
+
+builder.Services.AddTransient<ServiceStorageS3>();
+
+string connectionString = builder.Configuration.GetConnectionString("MySql");
+
+builder.Services.AddDbContext<DataContext>(options => options.UseMySQL(connectionString));
+
 
 var app = builder.Build();
 

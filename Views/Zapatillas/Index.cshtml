@@ -1,0 +1,56 @@
+@model IEnumerable<Zapatilla>
+
+@{
+    ViewData["Title"] = "Zapatillas";
+}
+
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="display-5 mb-1">Zapatillas</h1>
+        <p class="text-muted mb-0">Catálogo de zapatillas disponibles con sus imágenes y descripciones.</p>
+    </div>
+</div>
+
+<a asp-controller="Zapatillas"
+   asp-action="Create"
+   class="btn btn-primary">Subir Zapatilla</a>
+
+@{
+    var zapatillas = Model.ToList();
+}
+
+@if (zapatillas.Any())
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var zapatilla in zapatillas)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    <img src="@zapatilla.Imagen"
+                         class="card-img-top"
+                         alt="@zapatilla.Nombre"
+                         style="height: 240px; object-fit: cover;" />
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
+                            <h5 class="card-title mb-0">@zapatilla.Nombre</h5>
+                            <span class="badge bg-primary">#@zapatilla.IdProducto</span>
+                        </div>
+                        <p class="card-text text-muted flex-grow-1">
+                            @(string.IsNullOrWhiteSpace(zapatilla.Descripcion) ? "Sin descripción disponible." : zapatilla.Descripcion)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info shadow-sm" role="alert">
+        Todavía no hay zapatillas registradas.
+    </div>
+}
+
+
+
