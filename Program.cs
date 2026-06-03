@@ -1,8 +1,11 @@
 using Amazon.S3;
+using Newtonsoft.Json;
 using AwsZapasAdrianJacek.Data;
 using AwsZapasAdrianJacek.Repositories;
 using AwsZapasAdrianJacek.Services;
 using Microsoft.EntityFrameworkCore;
+using AwsZapasAdrianJacek.Helper;
+using AwsZapasAdrianJacek.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +18,17 @@ builder.Services.AddTransient<RepositoryZapatillas>();
 
 builder.Services.AddTransient<ServiceStorageS3>();
 
-string connectionString = builder.Configuration.GetConnectionString("MySql");
+string miSecret = await HelperSecretManager.GetSecretAsync();
+KeysModel model = JsonConvert.DeserializeObject<KeysModel>(miSecret);
+builder.Services.AddSingleton<KeysModel>(x => model);
+//string connectionString = builder.Configuration.GetConnectionString("MySql");
+//string connectionString = await HelperSecretManager.GetSecretAsync();
 
-builder.Services.AddDbContext<DataContext>(options => options.UseMySQL(connectionString));
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseMySQL(model.MySql);
+});
+//builder.Services.AddDbContext<DataContext>(options => options.UseMySQL(connectionString));
 
 
 var app = builder.Build();
